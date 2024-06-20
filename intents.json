@@ -10,13 +10,13 @@
      "context_set": ""
     },
     {"tag": "age",
-     "patterns": ["how old", "how old is tim", "what is your age", "how old are you", "age?"],
+     "patterns": ["how old", "how old is bpchat", "what is your age", "how old are you", "age?"],
      "responses": ["I am 18 years old!", "18 years young!"],
      "context_set": ""
     },
     {"tag": "name",
      "patterns": ["what is your name", "what should I call you", "whats your name?"],
-     "responses": ["You can call me Tim.", "I'm Tim!", "I'm Tim aka Tech With Tim."],
+     "responses": ["You can call me BPchat.", "I'm BPchat!", "I'm BPchat aka Smove With BPchat."],
      "context_set": ""
     },
     {"tag": "shop",
@@ -26,7 +26,7 @@
     },
     {"tag": "hours",
      "patterns": ["when are you guys open", "what are your hours", "hours of operation"],
-     "responses": ["We are open 7am-4pm Monday-Friday!"],
+     "responses": ["We are open 7:30am-4:30pm Monday-Friday!"],
      "context_set": ""
     }
 ]
