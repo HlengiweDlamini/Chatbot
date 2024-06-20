@@ -72,31 +72,30 @@ except:
         pickle.dump((words, labels, training, output), f)
 
 
-# to train the model
-# add this connected layer(connected to inputs) to neural network with 8 neurons for 1st hidden layer
-model = Sequential()
-model.add(Dense(8, input_shape=(len(training[0]),), activation='relu'))
-model.add(Dropout(0.5))
-model.add(Dense(8, activation='relu'))
-model.add(Dropout(0.5))
-model.add(Dense(len(output[0]), activation='softmax'))
-
-model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-
-# load the model(wont train model if one already exists)
+# build/train model or load the model(wont train model if one already exists)
 try:
-    model.load("model.h5")
+    model = tf.keras.models.load_model("model.keras")
 except:
+    # Handle the case where the model file does not exist or fails to load
+    model = Sequential()
+    model.add(Dense(8, input_shape=(len(training[0]),), activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(8, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(len(output[0]), activation='softmax'))
+
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
     # pass model with all training data || epoch= amount of times model will see the same data
     model.fit(training, output, epochs=1000, batch_size=8, verbose=1)
     # save model
-    model.save("model.h5")
+    model.save("model.keras")
 
 # -----------------------------making predictions---------------------------------------
 
 # turn sentence input from user into bag of words
 def bag_of_words(s, words):
-    bag = [0 for _ in range(len(words))] # store all words in blank list
+    bag = [0]*len(words) # store all words in blank list
     
     # list of tokenized words
     s_words = nltk.word_tokenize(s)
@@ -121,17 +120,17 @@ def chat():
             break
         
         # if user doesnt quit
-        results = model.predict([bag_of_words(inp, words)])
+        results = model.predict(np.array([bag_of_words(inp, words)]))
         # gives index of greatest probability value in list
         results_index = np.argmax(results)
         
         # use index to figure out which response to display
         tag = labels[results_index]
         
-        # open json file, find tag and pick random response
-        for tg in data["intents"]:
-            if tg['tag'] == tag:
-                responses = tg['responses']
+        # open json file, find tag and print response associated with predicted tag
+        for intent in data["intents"]:
+            if intent['tag'] == tag:
+                responses = intent['responses']
                 
         print(random.choice(responses))
          
